@@ -1,0 +1,6 @@
+#para que Git nunca suba tu clave a internet
+.env
+.venv/
+__pycache__/
+*.chroma
+*.pdf
