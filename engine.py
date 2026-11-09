@@ -14,13 +14,23 @@ from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_ex
 # Cargar variables locales (.env) si existen
 load_dotenv()
 
-# Obtener API key compatible con local y con Streamlit Cloud
-api_key = os.getenv("GEMINI_API_KEY")
-if not api_key and hasattr(st, "secrets") and "GEMINI_API_KEY" in st.secrets:
-    api_key = st.secrets["GEMINI_API_KEY"]
+def get_gemini_client():
+    # 1. Busca en variables de entorno (local)
+    key = os.getenv("GEMINI_API_KEY")
+    
+    # 2. Si no está en entorno, busca en secrets de Streamlit
+    if not key:
+        try:
+            if "GEMINI_API_KEY" in st.secrets:
+                key = st.secrets["GEMINI_API_KEY"]
+        except Exception:
+            pass
 
-# Inicializar clientes
-client = genai.Client(api_key=api_key)
+    if not key:
+        raise ValueError("No se encontró GEMINI_API_KEY en las variables ni en Secrets.")
+
+    return genai.Client(api_key=key)
+
 chroma_client = chromadb.Client()
 
 
@@ -122,10 +132,11 @@ def call_gemini_with_retry(client, model_name, prompt, schema):
 
 # 5. Agente Evaluador Gemini con Structured Outputs
 def evaluate_candidate(cv_text: str, job_description: str) -> ScreeningResult:
+    client = get_gemini_client()  # <- Se inicializa aquí de forma segura
     context_chunks = query_rag_cv(cv_text, job_description)
 
-    prompt = f"""Eres un Reclutador Técnico Senior y Especialista en Selección de Talento. Tu tarea es evaluar con rigor la compatibilidad de un candidato frente a una descripción de vacante.
-
+    prompt = f"""Eres un Reclutador Técnico Senior y Especialista en Selección de Talento...
+    
 VACANTE:
 {job_description}
 

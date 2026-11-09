@@ -1,27 +1,34 @@
-# 🎯 AI Job Match Screener (RAG & LLM Pipeline)
+# 🎯 AI Job Match Screener (RAG & Gemini Pipeline)
 
-An intelligent technical screening engine that analyzes candidate resumes (PDFs) against job descriptions using **Retrieval-Augmented Generation (RAG)**, local semantic vector search, and structured outputs powered by **Gemini 3.5**.
+An executive-grade technical screening engine that audits candidate resumes (PDFs) against job descriptions using Retrieval-Augmented Generation (RAG), local semantic search, and structured schema outputs powered by Google Gemini.
+
+> **Live Demo:** [Deploy on Streamlit Community Cloud](https://streamlit.io/)
 
 ---
 
 ## 🚀 Key Features
 
-* **PDF Ingestion & Text Extraction**: Efficiently extracts raw resume text using `pypdf`.
-* **RAG Pipeline with ChromaDB**: Segments resumes into logical chunks and indexes them in an in-memory vector database for semantic similarity retrieval.
-* **Grounding & Hallucination Mitigation**: Constrains the LLM to extract verbatim textual evidence (`evidence_quote`) from the candidate's CV.
-* **Strict Structured Outputs**: Utilizes **Pydantic** to enforce rigorous data validation and return typed JSON schemas (`match_score`, `key_strengths`, `key_gaps`, and technical interview questions).
-* **Interactive UI**: Clean, reactive web interface built with **Streamlit**.
+* **PDF Ingestion & Chunking:** Ingests candidate resumes using `pypdf`, normalizing text into logical semantic chunks.
+* **In-Memory RAG Architecture:** Employs `ChromaDB` for instant local vector indexing and top-k context retrieval against job description requirements without external database overhead.
+* **Audited Grounding & Zero-Hallucination:** Forces the LLM to extract verbatim quotes (`evidence_quote`) from the candidate's CV to support each requirement's compliance status.
+* **Requirements Compliance Matrix:** Instant traffic-light classification (`CUMPLE` / `PARCIAL` / `NO CUMPLE`) across technical qualifications and core competencies.
+* **Strict Typed Outputs:** Leverages `Pydantic v2` schemas to guarantee structured JSON output parsing (`match_score`, `key_strengths`, `key_gaps`, targeted interview questions, and study guides).
+* **Gap Mitigation & Interview Prep:** Generates role-specific behavioral/technical questions focused on identified deficiencies, plus a curated self-study roadmap to bridge technical gaps.
+* **Resilient API Calls:** Integrated exponential backoff and jitter via `tenacity` to handle rate limits (`429`) and upstream service saturation gracefully.
+* **Modern Executive Dashboard:** Built with native `Streamlit` containers for clean responsive layouts in both light and dark themes.
 
 ---
 
 ## 🛠️ Tech Stack & Architecture
 
-* **Language**: Python 3.10+
-* **LLM**: Google Gemini (`gemini-3.5-flash`) via `google-genai` SDK
-* **Vector Database**: ChromaDB (In-memory semantic search)
-* **Schema Validation**: Pydantic v2
-* **Frontend**: Streamlit
-* **Document Processing**: PyPDF
+| Layer | Technology | Purpose |
+| :--- | :--- | :--- |
+| **Frontend / UI** | `Streamlit` | Interactive data input, real-time metrics, and audit dashboards |
+| **LLM Inference** | `Google Gemini` (`gemini-2.5-flash`) | Context analysis, structured extraction, and interview synthesis |
+| **Vector Engine** | `ChromaDB` | In-memory embedding generation and semantic similarity search |
+| **Data Validation** | `Pydantic v2` | Strict schema enforcement (`RequirementMatch`, `ScreeningResult`) |
+| **Document Parser** | `PyPDF` | Multi-page text extraction from uploaded PDF resumes |
+| **Resilience** | `Tenacity` | Exponential backoff retry handler for API rate limits |
 
 ---
 
