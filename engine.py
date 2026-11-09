@@ -136,7 +136,7 @@ def evaluate_candidate(cv_text: str, job_description: str) -> ScreeningResult:
     context_chunks = query_rag_cv(cv_text, job_description)
 
     prompt = f"""Eres un Reclutador Técnico Senior y Especialista en Selección de Talento...
-    
+
 VACANTE:
 {job_description}
 
@@ -154,10 +154,10 @@ REGLAS ESTRICTAS DE EVALUACIÓN:
 5. Estudio: Recomienda cursos o guías de estudio concretas para nivelar lo que NO CUMPLE el candidato frente a la vacante."""
 
     response = call_gemini_with_retry(
-        client=client,
-        model_name="gemini-2.5-flash",
-        prompt=prompt,
-        schema=ScreeningResult,
+    client=client,
+    model_name="gemini-3.8-flash",  
+    prompt=prompt,
+    schema=ScreeningResult,
     )
 
     return ScreeningResult.model_validate_json(response.text)
